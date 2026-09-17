@@ -5,45 +5,63 @@ window.Auth = (function () {
 
   function renderLogin() {
     document.getElementById('appShell').classList.add('hidden');
-    document.getElementById('loginPage').classList.remove('hidden');
-    document.getElementById('loginPage').innerHTML = `
-      <div class="login-card animate-fade">
-        <div class="login-brand">
-          <img src="Logo.png" alt="NNMV Logo" class="login-logo">
-          <h1 class="login-title">नगर निगम मथुरा-वृन्दावन</h1>
-          <p class="login-subtitle">Development Works Monitoring System</p>
+    const loginPage = document.getElementById('loginPage');
+    loginPage.classList.remove('hidden');
+    
+    // Split layout with canvases
+    loginPage.innerHTML = `
+      <div class="login-split">
+        <div class="login-left">
+          <canvas id="particles-left"></canvas>
+          <div class="login-left-content animate-fade">
+            <img src="Logo.png" alt="NNMV Logo" class="split-logo">
+            <h1>DEVELOPMENT WORKS</h1>
+            <p class="subtitle">MONITORING SYSTEM</p>
+            <hr>
+            <p class="desc">Centralized monitoring and tracking portal for Nagar Nigam Mathura-Vrindavan. Authorized personnel only.</p>
+            <div style="margin-top: 3rem; display: flex; align-items: center; color: var(--success); font-size: 0.8rem;">
+              <i class="hgi-stroke hgi-shield-check" style="margin-right: 8px;"></i> Secure Administrator Terminal
+            </div>
+          </div>
         </div>
+        <div class="login-right">
+          <canvas id="particles-right"></canvas>
+          <div class="login-card animate-fade" style="position: relative; z-index: 2; margin: 0; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: none;">
+            <div class="login-brand" style="text-align: left; margin-bottom: 2rem;">
+              <h2 style="font-size: 1.5rem; color: var(--neutral-900); margin-bottom: 0.5rem; font-weight: 700;">Secure Login</h2>
+              <p style="color: var(--neutral-500); font-size: 0.875rem; margin-bottom: 0;">Enter your assigned credentials to continue.</p>
+            </div>
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="loginRole" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--neutral-600); font-weight: 600;">Role / भूमिका</label>
+                <select id="loginRole" required>
+                  <option value="">— Select Role —</option>
+                  <option value="admin">Super Admin</option>
+                  <option value="officer">Municipal Officer</option>
+                  <option value="je">Junior Engineer (JE)</option>
+                  <option value="councillor">Councillor / पार्षद</option>
+                </select>
+              </div>
 
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="loginRole">Login As / भूमिका चुनें</label>
-            <select id="loginRole" required>
-              <option value="">— Select Role —</option>
-              <option value="admin">Super Admin</option>
-              <option value="officer">Municipal Officer</option>
-              <option value="je">Junior Engineer (JE)</option>
-              <option value="councillor">Councillor / पार्षद</option>
-            </select>
+              <div class="form-group">
+                <label for="loginUser" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--neutral-600); font-weight: 600;">Username / उपयोगकर्ता</label>
+                <input type="text" id="loginUser" placeholder="Enter username" value="admin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="loginPass" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--neutral-600); font-weight: 600;">Password / पासवर्ड</label>
+                <input type="password" id="loginPass" placeholder="Enter password" value="admin123" required>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="loginBtn" style="width: 100%; margin-top: 1rem; padding: 12px; font-weight: 600; background-color: var(--success); border-color: var(--success);">
+                <i class="hgi-stroke hgi-lock"></i> SECURE SIGN IN
+              </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+              <a href="#" style="color: var(--text-tertiary); font-size: 0.75rem; text-decoration: underline;">Installation Guide & System Requirements</a>
+            </div>
           </div>
-
-          <div class="form-group">
-            <label for="loginUser">Username / उपयोगकर्ता</label>
-            <input type="text" id="loginUser" placeholder="Enter username" value="admin" required>
-          </div>
-
-          <div class="form-group">
-            <label for="loginPass">Password / पासवर्ड</label>
-            <input type="password" id="loginPass" placeholder="Enter password" value="admin123" required>
-          </div>
-
-          <button type="submit" class="btn btn-primary" id="loginBtn">
-            <i class="hgi-stroke hgi-lock"></i> Login / लॉगिन करें
-          </button>
-        </form>
-
-        <div class="login-footer">
-          <p style="margin:0">© 2026 Nagar Nigam Mathura-Vrindavan</p>
-          <p style="margin:4px 0 0">nnmv.online | Development Works Monitoring</p>
         </div>
       </div>
     `;
@@ -53,6 +71,81 @@ window.Auth = (function () {
       const role = document.getElementById('loginRole').value;
       if (!role) { alert('Please select a role'); return; }
       login(role);
+    });
+
+    // Initialize particles slightly delayed to ensure DOM is ready and styled
+    setTimeout(() => {
+      initParticles('particles-left', 'rgba(21, 153, 87, 0.85)'); // Brighter Teal/Green dots on dark background
+      initParticles('particles-right', 'rgba(21, 153, 87, 0.25)'); // Brighter faint green dots on white background
+    }, 50);
+  }
+
+  function initParticles(canvasId, color) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = canvas.parentElement.clientWidth;
+    let height = canvas.height = canvas.parentElement.clientHeight;
+
+    const particles = [];
+    const count = window.innerWidth < 768 ? 30 : 90; // Increased particle count
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        radius: Math.random() * 2 + 1.5
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < count; i++) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        for (let j = i + 1; j < count; j++) {
+          let p2 = particles[j];
+          let dx = p.x - p2.x;
+          let dy = p.y - p2.y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 180) { // Increased connection distance
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            const alphaMatch = color.match(/[0-9.]+\)/);
+            if (alphaMatch) {
+              const baseAlpha = parseFloat(alphaMatch[0]);
+              const dynamicAlpha = Math.max(0, baseAlpha * (1 - dist / 180));
+              ctx.strokeStyle = color.replace(/[0-9.]+\)$/, dynamicAlpha + ')');
+            } else {
+              ctx.strokeStyle = color; // fallback
+            }
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    window.addEventListener('resize', () => {
+      if(!canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
     });
   }
 
