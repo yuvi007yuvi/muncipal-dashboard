@@ -33,23 +33,57 @@ const db = new sqlite3.Database('./database.sqlite', (err) => {
     // Create Works Table
     db.run(`CREATE TABLE IF NOT EXISTS works (
       id TEXT PRIMARY KEY,
+      name TEXT,
       wardId INTEGER,
-      title TEXT,
-      scheme TEXT,
-      type TEXT,
-      contractor TEXT,
-      je TEXT,
+      workType TEXT,
+      schemeId INTEGER,
+      departmentId INTEGER,
+      jeId INTEGER,
+      contractorId INTEGER,
       amount INTEGER,
       status TEXT,
       progress INTEGER,
       remarks TEXT,
+      startDate TEXT,
+      targetDate TEXT,
       lat REAL,
       lng REAL
+    )`);
+
+    // Create Users Table
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      username TEXT UNIQUE,
+      password TEXT,
+      name TEXT,
+      role TEXT,
+      roleName TEXT,
+      wardId INTEGER,
+      jeId TEXT
     )`);
   }
 });
 
-// --- API Endpoints ---
+// API ENDPOINTS
+// -----------------------------
+
+// Login
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  db.get("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, row) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    if (!row) {
+      res.status(401).json({ error: 'Invalid username or password' });
+      return;
+    }
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = row;
+    res.json(userWithoutPassword);
+  });
+});
 
 // Get all Wards
 app.get('/api/wards', (req, res) => {

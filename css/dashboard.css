@@ -179,30 +179,38 @@ canvas#particles-right {
   flex-shrink: 0;
 }
 
-/* KPI Color Utilities (Solid Accents) */
-.border-primary { border-left-color: var(--primary-600); }
-.icon-primary { background: var(--primary-50); color: var(--primary-600); }
+/* KPI Color Utilities (Solid Backgrounds) */
+.border-primary { background: var(--primary-600); border: none; color: white; }
+.border-primary .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-primary .kpi-label, .border-primary .kpi-value, .border-primary .kpi-change { color: white; }
 
-.border-accent { border-left-color: var(--accent-600); }
-.icon-accent { background: var(--accent-50); color: var(--accent-600); }
+.border-accent { background: var(--accent-600); border: none; color: white; }
+.border-accent .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-accent .kpi-label, .border-accent .kpi-value, .border-accent .kpi-change { color: white; }
 
-.border-gray { border-left-color: var(--status-not-started); }
-.icon-gray { background: #f3f4f6; color: var(--status-not-started); }
+.border-gray { background: #64748b; border: none; color: white; }
+.border-gray .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-gray .kpi-label, .border-gray .kpi-value, .border-gray .kpi-change { color: white; }
 
-.border-info { border-left-color: var(--status-in-progress); }
-.icon-info { background: #e0f2fe; color: var(--status-in-progress); }
+.border-info { background: var(--status-in-progress); border: none; color: white; }
+.border-info .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-info .kpi-label, .border-info .kpi-value, .border-info .kpi-change { color: white; }
 
-.border-success { border-left-color: var(--success); }
-.icon-success { background: var(--success-light); color: var(--success-text); }
+.border-success { background: var(--success); border: none; color: white; }
+.border-success .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-success .kpi-label, .border-success .kpi-value, .border-success .kpi-change { color: white; }
 
-.border-danger { border-left-color: var(--status-delayed); }
-.icon-danger { background: var(--danger-light); color: var(--status-delayed); }
+.border-danger { background: var(--status-delayed); border: none; color: white; }
+.border-danger .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-danger .kpi-label, .border-danger .kpi-value, .border-danger .kpi-change { color: white; }
 
-.border-warning { border-left-color: var(--status-on-hold); }
-.icon-warning { background: var(--warning-light); color: var(--warning-text); }
+.border-warning { background: var(--status-on-hold); border: none; color: white; }
+.border-warning .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-warning .kpi-label, .border-warning .kpi-value, .border-warning .kpi-change { color: white; }
 
-.border-purple { border-left-color: var(--status-verification); }
-.icon-purple { background: #ede9fe; color: var(--status-verification); }
+.border-purple { background: var(--status-verification); border: none; color: white; }
+.border-purple .kpi-icon { background: rgba(255,255,255,0.2); color: white; }
+.border-purple .kpi-label, .border-purple .kpi-value, .border-purple .kpi-change { color: white; }
 
 .kpi-label {
   font-size: var(--text-xs);
@@ -216,7 +224,6 @@ canvas#particles-right {
 .kpi-value {
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
-  color: var(--text-primary);
   line-height: 1;
 }
 

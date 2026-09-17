@@ -496,9 +496,20 @@ window.DATA = {
       
       const worksRes = await fetch('http://localhost:3000/api/works');
       if (worksRes.ok) {
-        const works = await worksRes.json();
+        const rawWorks = await worksRes.json();
+        const hydratedWorks = rawWorks.map(w => ({
+          ...w,
+          ward: WARDS.find(x => x.id === w.wardId),
+          scheme: SCHEMES.find(x => x.id === w.schemeId),
+          workType: w.workType,
+          department: DEPARTMENTS.find(x => x.id === w.departmentId),
+          contractor: CONTRACTORS.find(x => x.id === w.contractorId),
+          assignedJE: JES.find(x => x.id === w.jeId),
+          sanctionedAmount: w.amount,
+          location: { lat: w.lat, lng: w.lng }
+        }));
         WORKS.length = 0;
-        WORKS.push(...works);
+        WORKS.push(...hydratedWorks);
       }
       
       console.log('Database loaded successfully!');

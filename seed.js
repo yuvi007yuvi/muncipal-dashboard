@@ -29,16 +29,19 @@ db.serialize(() => {
 
   db.run(`CREATE TABLE IF NOT EXISTS works (
     id TEXT PRIMARY KEY,
+    name TEXT,
     wardId INTEGER,
-    title TEXT,
-    scheme TEXT,
-    type TEXT,
-    contractor TEXT,
-    je TEXT,
+    workType TEXT,
+    schemeId INTEGER,
+    departmentId INTEGER,
+    jeId INTEGER,
+    contractorId INTEGER,
     amount INTEGER,
     status TEXT,
     progress INTEGER,
     remarks TEXT,
+    startDate TEXT,
+    targetDate TEXT,
     lat REAL,
     lng REAL
   )`);
@@ -51,9 +54,26 @@ db.serialize(() => {
   stmtWards.finalize();
 
   console.log('Seeding Works...');
-  const stmtWorks = db.prepare('INSERT OR REPLACE INTO works (id, wardId, title, scheme, type, contractor, je, amount, status, progress, remarks, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+  const stmtWorks = db.prepare('INSERT OR REPLACE INTO works (id, name, wardId, workType, schemeId, departmentId, jeId, contractorId, amount, status, progress, remarks, startDate, targetDate, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
   for (const w of WORKS) {
-    stmtWorks.run(w.id, w.wardId, w.title, w.scheme, w.type, w.contractor, w.je, w.amount, w.status, w.progress, w.remarks, w.lat, w.lng);
+    stmtWorks.run(
+      w.id,
+      w.name,
+      w.ward?.id || null,
+      w.workType,
+      w.scheme?.id || null,
+      w.department?.id || null,
+      w.assignedJE?.id || null,
+      w.contractor?.id || null,
+      w.sanctionedAmount || 0,
+      w.status,
+      w.progress,
+      w.remarks || '',
+      w.startDate || '',
+      w.targetDate || '',
+      w.location?.lat || null,
+      w.location?.lng || null
+    );
   }
   stmtWorks.finalize();
   
