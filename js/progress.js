@@ -267,7 +267,7 @@ window.ProgressPage = (function () {
 
         <div class="analytics-grid">
           ${wardStats.map(w => `
-            <div class="analytics-card" onclick="Router.navigate('works')">
+            <div class="analytics-card" onclick="WorksPage.setFilterAndNavigate('ward', '${w.ward.id}')">
               <div class="analytics-header">
                 <div class="analytics-title">${w.ward.nameEn}</div>
                 <div class="analytics-icon"><i class="hgi-stroke hgi-map"></i></div>
@@ -316,7 +316,7 @@ window.ProgressPage = (function () {
 
         <div class="analytics-grid">
           ${schemeStats.map(s => `
-            <div class="analytics-card">
+            <div class="analytics-card" onclick="WorksPage.setFilterAndNavigate('scheme', '${s.scheme.id}')">
               <div class="analytics-header">
                 <div>
                   <div class="analytics-title">${s.scheme.short}</div>
@@ -365,7 +365,7 @@ window.ProgressPage = (function () {
 
         <div class="analytics-grid">
           ${deptStats.map(d => `
-            <div class="analytics-card">
+            <div class="analytics-card" onclick="WorksPage.setFilterAndNavigate('dept', '${d.department.id}')">
               <div class="analytics-header">
                 <div class="analytics-title"><i class="hgi-stroke hgi-office"></i> ${d.department.name}</div>
               </div>

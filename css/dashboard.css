@@ -291,6 +291,7 @@
   padding: var(--space-4);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
+  cursor: pointer;
 }
 
 .analytics-card:hover {

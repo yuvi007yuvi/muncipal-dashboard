@@ -152,6 +152,12 @@ window.WorksPage = (function () {
     renderList(document.getElementById('mainContent'));
   }
 
+  function setFilterAndNavigate(key, value) {
+    currentFilters = {};
+    currentFilters[key] = String(value);
+    Router.navigate('works');
+  }
+
   function exportWorks() {
     const filtered = applyFilters(DATA.WORKS);
     const headers = ['Work ID', 'Work Name', 'Ward', 'Zone', 'Scheme', 'Department', 'Status', 'Progress %', 'JE', 'Contractor', 'Sanctioned Amount', 'Start Date', 'Completion Date'];
@@ -364,5 +370,5 @@ window.WorksPage = (function () {
     }).join('');
   }
 
-  return { renderList, renderDetail, applyFilter, resetFilters, exportWorks };
+  return { renderList, renderDetail, applyFilter, resetFilters, exportWorks, setFilterAndNavigate };
 })();
