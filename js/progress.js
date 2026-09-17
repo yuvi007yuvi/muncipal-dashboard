@@ -151,7 +151,7 @@ window.ProgressPage = (function () {
     return Utils.dataTable(headers, rows);
   }
 
-  function submitUpdate(e) {
+  async function submitUpdate(e) {
     e.preventDefault();
     const workId = document.getElementById('puWorkId').value;
     const progress = document.getElementById('puProgress').value;
@@ -163,9 +163,22 @@ window.ProgressPage = (function () {
       return;
     }
 
-    // Demo: show success
-    alert(`✅ Progress Update Submitted!\n\nWork: ${workId}\nProgress: ${progress}%\nStatus: ${status}\nRemarks: ${remarks}\n\n(This is a demo — data is not persisted)`);
-    e.target.reset();
+    try {
+      const res = await fetch(`http://localhost:3000/api/works/${workId}/progress`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ progress: parseInt(progress), status, remarks })
+      });
+      if (res.ok) {
+        alert(`✅ Progress Update Submitted to Database!\n\nWork: ${workId}\nProgress: ${progress}%\nStatus: ${status}\nRemarks: ${remarks}`);
+        await window.DATA.init(); // Refresh data
+        e.target.reset();
+      } else {
+        alert('Failed to save to database.');
+      }
+    } catch (err) {
+      alert('Error connecting to database: ' + err.message);
+    }
   }
 
   // ── Councillor Dashboard ──

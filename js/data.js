@@ -482,5 +482,28 @@ window.DATA = {
   MILESTONE_TEMPLATES, STATUSES, WORKS, ALL_MILESTONES, ALL_PROGRESS_UPDATES,
   ALL_PHOTOS, AUDIT_LOG, NOTIFICATIONS, USERS,
   computeStats, computeWardStats, computeSchemeStats, computeDeptStats, computeJEStats,
-  formatDate, addDays, randomItem, randomInt
+  formatDate, addDays, randomItem, randomInt,
+  
+  init: async function() {
+    try {
+      console.log('Fetching data from SQLite API...');
+      const wardsRes = await fetch('http://localhost:3000/api/wards');
+      if (wardsRes.ok) {
+        const wards = await wardsRes.json();
+        WARDS.length = 0;
+        WARDS.push(...wards);
+      }
+      
+      const worksRes = await fetch('http://localhost:3000/api/works');
+      if (worksRes.ok) {
+        const works = await worksRes.json();
+        WORKS.length = 0;
+        WORKS.push(...works);
+      }
+      
+      console.log('Database loaded successfully!');
+    } catch (e) {
+      console.error('API connection failed, falling back to mock data.', e);
+    }
+  }
 };

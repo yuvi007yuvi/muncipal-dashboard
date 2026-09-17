@@ -58,31 +58,90 @@ window.MastersPage = (function () {
   }
 
   function renderWardsTab(el) {
-    const wardData = Object.values(DATA.computeWardStats()).filter(w => w.total > 0);
-    const headers = ['Ward No.', 'Ward Name', 'Zone', 'Councillor', 'Total Works', 'Completed', 'In Progress', 'Delayed'];
-    const rows = wardData.map(w => `
-      <tr class="clickable" onclick="Router.navigate('works')">
-        <td><strong>${w.ward.id}</strong></td>
-        <td class="text-hindi">${w.ward.name}</td>
-        <td>${w.ward.zone}</td>
-        <td>${w.ward.councillor}</td>
-        <td><strong>${w.total}</strong></td>
-        <td style="color:var(--success)">${w.byStatus.completed || 0}</td>
-        <td style="color:var(--info)">${w.byStatus.in_progress || 0}</td>
-        <td style="color:var(--danger)">${w.byStatus.delayed || 0}</td>
+    const headers = ['Ward No.', 'Ward Name', 'Zone', 'Councillor', 'Party', 'Phone', 'Actions'];
+    const rows = DATA.WARDS.map(w => `
+      <tr>
+        <td><strong>${w.id}</strong></td>
+        <td class="text-hindi">${w.nameEn}</td>
+        <td>${w.zone}</td>
+        <td>${w.councillor}</td>
+        <td><span class="badge" style="background:var(--primary-100);color:var(--primary-800)">${w.party || 'N/A'}</span></td>
+        <td>${w.phone || 'N/A'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline" onclick="MastersPage.editWard(${w.id})"><i class="hgi-stroke hgi-edit-02"></i> Edit</button>
+        </td>
       </tr>
     `);
 
     el.innerHTML = `
       <div class="card animate-fade">
         <div class="card-header">
-          <h3>Wards / वार्ड (${wardData.length} with works)</h3>
-          <button class="btn btn-sm btn-primary" onclick="alert('Add Ward modal - Demo')">+ Add Ward</button>
+          <h3>Wards / वार्ड (${DATA.WARDS.length})</h3>
         </div>
-        <div class="card-body" style="padding:0">
+        <div class="card-body" style="padding:0; max-height: 60vh; overflow-y: auto;">
           ${Utils.dataTable(headers, rows)}
         </div>
-      </div>`;
+      </div>
+      
+      <!-- Edit Ward Modal -->
+      <div id="wardEditModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div class="card" style="width: 400px; padding: 2rem; box-shadow: var(--shadow-lg);">
+          <h3 id="wardEditTitle" style="margin-bottom:1.5rem; color:var(--primary-700)">Edit Ward</h3>
+          <input type="hidden" id="editWardId">
+          <div class="form-group" style="margin-bottom:1rem">
+            <label style="display:block; margin-bottom:0.5rem; font-weight:600">Councillor Name</label>
+            <input type="text" id="editWardCouncillor" class="form-control" style="width:100%; padding:8px; border:1px solid var(--border-light); border-radius:4px;">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label style="display:block; margin-bottom:0.5rem; font-weight:600">Party</label>
+            <input type="text" id="editWardParty" class="form-control" style="width:100%; padding:8px; border:1px solid var(--border-light); border-radius:4px;">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label style="display:block; margin-bottom:0.5rem; font-weight:600">Phone Number</label>
+            <input type="text" id="editWardPhone" class="form-control" style="width:100%; padding:8px; border:1px solid var(--border-light); border-radius:4px;">
+          </div>
+          <div style="display:flex; gap:10px; margin-top:2rem">
+            <button class="btn btn-primary" style="flex:1" onclick="MastersPage.saveWard()">Save Changes</button>
+            <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('wardEditModal').style.display='none'">Cancel</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function editWard(id) {
+    const ward = DATA.WARDS.find(w => w.id === id);
+    if (!ward) return;
+    document.getElementById('wardEditTitle').innerText = `Edit Ward ${ward.id} (${ward.nameEn})`;
+    document.getElementById('editWardId').value = ward.id;
+    document.getElementById('editWardCouncillor').value = ward.councillor || '';
+    document.getElementById('editWardParty').value = ward.party || '';
+    document.getElementById('editWardPhone').value = ward.phone || '';
+    document.getElementById('wardEditModal').style.display = 'flex';
+  }
+
+  async function saveWard() {
+    const id = parseInt(document.getElementById('editWardId').value);
+    const councillor = document.getElementById('editWardCouncillor').value;
+    const party = document.getElementById('editWardParty').value;
+    const phone = document.getElementById('editWardPhone').value;
+    
+    try {
+      const res = await fetch(`http://localhost:3000/api/wards/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ councillor, party, phone })
+      });
+      if (res.ok) {
+        document.getElementById('wardEditModal').style.display = 'none';
+        await window.DATA.init(); // Refresh data from DB
+        renderTab(); // Re-render the UI
+      } else {
+        alert('Failed to save to database.');
+      }
+    } catch (err) {
+      alert('Error connecting to database: ' + err.message);
+    }
   }
 
   function renderSchemesTab(el) {
@@ -276,5 +335,9 @@ window.MastersPage = (function () {
     `;
   }
 
-  return { render };
+  return { 
+    render,
+    editWard,
+    saveWard
+  };
 })();

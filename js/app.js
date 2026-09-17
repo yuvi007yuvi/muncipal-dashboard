@@ -3,8 +3,11 @@
 (function () {
   'use strict';
 
-  // Wait for DOM
-  document.addEventListener('DOMContentLoaded', function () {
+// Wait for DOM
+  document.addEventListener('DOMContentLoaded', async function () {
+    
+    // Initialize data from API
+    await window.DATA.init();
 
     // ── Register Routes ──
     Router.register('dashboard', function (el) { DashboardPage.render(el); });
