@@ -106,16 +106,38 @@ canvas#particles-right {
 
 /* Mobile responsive */
 @media (max-width: 768px) {
+  .login-page {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
   .login-split {
     flex-direction: column;
+    height: auto;
+    min-height: 100vh;
   }
   .login-left {
-    padding: 2rem;
+    padding: 3rem 1.5rem;
     flex: none;
-    height: 40%;
+    height: auto;
+    justify-content: flex-start;
+  }
+  .login-right {
+    padding: 2rem 1.5rem;
+    flex: none;
+    height: auto;
+    align-items: flex-start;
+  }
+  .login-card {
+    padding: 2rem;
+    margin: 0 auto;
   }
   .login-left-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+  }
+  .split-logo {
+    height: 50px;
+    margin-bottom: 1.5rem;
   }
 }
 
