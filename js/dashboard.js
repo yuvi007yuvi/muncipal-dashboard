@@ -28,14 +28,14 @@ window.DashboardPage = (function () {
 
         <!-- KPI Cards -->
         <div class="kpi-grid">
-          ${kpiCard('kpi-total', '<i class="hgi-stroke hgi-building-04"></i>', 'Total Works / कुल कार्य', stats.total, '')}
-          ${kpiCard('kpi-amount', '<i class="hgi-stroke hgi-wallet-01"></i>', 'Sanctioned Amount', Utils.formatCurrency(stats.totalAmount), '')}
-          ${kpiCard('kpi-not-started', '<i class="hgi-stroke hgi-pause-circle"></i>', 'Not Started', stats.byStatus.not_started || 0, '')}
-          ${kpiCard('kpi-progress', '<i class="hgi-stroke hgi-refresh"></i>', 'In Progress / प्रगति पर', stats.byStatus.in_progress || 0, '')}
-          ${kpiCard('kpi-completed', '<i class="hgi-stroke hgi-checkmark-circle-02"></i>', 'Completed / पूर्ण', stats.byStatus.completed || 0, '')}
-          ${kpiCard('kpi-delayed', '<i class="hgi-stroke hgi-alert-01"></i>', 'Delayed / विलंबित', stats.byStatus.delayed || 0, '')}
-          ${kpiCard('kpi-hold', '<i class="hgi-stroke hgi-hourglass"></i>', 'On Hold / रुका हुआ', stats.byStatus.on_hold || 0, '')}
-          ${kpiCard('kpi-avg', '<i class="hgi-stroke hgi-chart-bar-line"></i>', 'Avg. Progress %', stats.avgProgress + '%', '')}
+          ${kpiCard('kpi-total border-primary', 'icon-primary', '<i class="hgi-stroke hgi-building-04"></i>', 'Total Works / कुल कार्य', stats.total, '')}
+          ${kpiCard('kpi-amount border-accent', 'icon-accent', '<i class="hgi-stroke hgi-wallet-01"></i>', 'Sanctioned Amount', Utils.formatCurrency(stats.totalAmount), '')}
+          ${kpiCard('kpi-not-started border-gray', 'icon-gray', '<i class="hgi-stroke hgi-pause-circle"></i>', 'Not Started', stats.byStatus.not_started || 0, '')}
+          ${kpiCard('kpi-progress border-info', 'icon-info', '<i class="hgi-stroke hgi-refresh"></i>', 'In Progress / प्रगति पर', stats.byStatus.in_progress || 0, '')}
+          ${kpiCard('kpi-completed border-success', 'icon-success', '<i class="hgi-stroke hgi-checkmark-circle-02"></i>', 'Completed / पूर्ण', stats.byStatus.completed || 0, '')}
+          ${kpiCard('kpi-delayed border-danger', 'icon-danger', '<i class="hgi-stroke hgi-alert-01"></i>', 'Delayed / विलंबित', stats.byStatus.delayed || 0, '')}
+          ${kpiCard('kpi-hold border-warning', 'icon-warning', '<i class="hgi-stroke hgi-hourglass"></i>', 'On Hold / रुका हुआ', stats.byStatus.on_hold || 0, '')}
+          ${kpiCard('kpi-avg border-purple', 'icon-purple', '<i class="hgi-stroke hgi-chart-bar-line"></i>', 'Avg. Progress %', stats.avgProgress + '%', '')}
         </div>
 
         <!-- Quick Actions -->
@@ -61,11 +61,14 @@ window.DashboardPage = (function () {
           <!-- Ward-wise Works Bar Chart -->
           <div class="chart-card">
             <h3><i class="hgi-stroke hgi-map"></i> Top Wards by Works</h3>
-            ${Utils.hBarChart(topWards.map(w => ({
-              label: w.ward.nameEn,
-              value: w.total,
-              color: 'var(--primary-600)'
-            })))}
+            ${Utils.hBarChart(topWards.map((w, idx) => {
+              const colors = ['var(--primary-600)', 'var(--accent-600)', 'var(--success)', 'var(--status-verification)', 'var(--status-in-progress)'];
+              return {
+                label: w.ward.nameEn,
+                value: w.total,
+                color: colors[idx % colors.length]
+              };
+            }))}
           </div>
         </div>
 
@@ -118,10 +121,10 @@ window.DashboardPage = (function () {
     `;
   }
 
-  function kpiCard(cls, icon, label, value, change) {
+  function kpiCard(cls, iconCls, icon, label, value, change) {
     return `
       <div class="kpi-card ${cls}">
-        <div class="kpi-icon">${icon}</div>
+        <div class="kpi-icon ${iconCls}">${icon}</div>
         <div class="kpi-content">
           <div class="kpi-label">${label}</div>
           <div class="kpi-value">${value}</div>

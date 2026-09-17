@@ -133,9 +133,16 @@ canvas#particles-right {
   padding: var(--space-4);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
+  border-left: 5px solid var(--border-light);
   display: flex;
   align-items: center;
   box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .kpi-icon {
@@ -147,10 +154,33 @@ canvas#particles-right {
   justify-content: center;
   font-size: 24px;
   margin-right: 16px;
-  background: var(--primary-50);
-  color: var(--primary-600);
   flex-shrink: 0;
 }
+
+/* KPI Color Utilities (Solid Accents) */
+.border-primary { border-left-color: var(--primary-600); }
+.icon-primary { background: var(--primary-50); color: var(--primary-600); }
+
+.border-accent { border-left-color: var(--accent-600); }
+.icon-accent { background: var(--accent-50); color: var(--accent-600); }
+
+.border-gray { border-left-color: var(--status-not-started); }
+.icon-gray { background: #f3f4f6; color: var(--status-not-started); }
+
+.border-info { border-left-color: var(--status-in-progress); }
+.icon-info { background: #e0f2fe; color: var(--status-in-progress); }
+
+.border-success { border-left-color: var(--success); }
+.icon-success { background: var(--success-light); color: var(--success-text); }
+
+.border-danger { border-left-color: var(--status-delayed); }
+.icon-danger { background: var(--danger-light); color: var(--status-delayed); }
+
+.border-warning { border-left-color: var(--status-on-hold); }
+.icon-warning { background: var(--warning-light); color: var(--warning-text); }
+
+.border-purple { border-left-color: var(--status-verification); }
+.icon-purple { background: #ede9fe; color: var(--status-verification); }
 
 .kpi-label {
   font-size: var(--text-xs);
