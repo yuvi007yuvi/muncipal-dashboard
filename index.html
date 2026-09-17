@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Nagar Nigam Mathura-Vrindavan Development Works Monitoring Dashboard - Centralized monitoring system for all development and construction works">
+  <title>NNMV | Development Works Monitoring Dashboard</title>
+
+  <!-- Favicon & Icons -->
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+  <!-- ============ LOGIN PAGE ============ -->
+  <div id="loginPage" class="login-page"></div>
+
+  <!-- ============ APP SHELL ============ -->
+  <div id="appShell" class="app-shell hidden">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="Logo.png" alt="Logo" class="brand-logo" style="width: 32px; height: auto; margin-right: 12px;">
+        <div class="brand-text">
+          <span class="brand-title">NNMV Dashboard</span>
+          <span class="brand-subtitle">नगर निगम मथुरा-वृन्दावन</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <!-- Main -->
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+        </div>
+        <a class="nav-item active" data-route="dashboard" data-role="admin,officer" href="#dashboard">
+          <span class="nav-icon"><i class="hgi-stroke hgi-analytics-02"></i></span> Dashboard
+        </a>
+        <a class="nav-item" data-route="je-dashboard" data-role="je" href="#je-dashboard">
+          <span class="nav-icon"><i class="hgi-stroke hgi-wrench"></i></span> JE Dashboard
+        </a>
+        <a class="nav-item" data-route="councillor-dashboard" data-role="councillor" href="#councillor-dashboard">
+          <span class="nav-icon"><i class="hgi-stroke hgi-medal-star"></i></span> Ward Works
+        </a>
+
+        <!-- Works -->
+        <div class="nav-section">
+          <div class="nav-section-title">Works</div>
+        </div>
+        <a class="nav-item" data-route="works" data-role="all" href="#works">
+          <span class="nav-icon"><i class="hgi-stroke hgi-clipboard"></i></span> All Works
+        </a>
+
+        <!-- Analytics -->
+        <div class="nav-section">
+          <div class="nav-section-title">Analytics</div>
+        </div>
+        <a class="nav-item" data-route="ward-analytics" data-role="admin,officer" href="#ward-analytics">
+          <span class="nav-icon"><i class="hgi-stroke hgi-map"></i></span> Ward Analytics
+        </a>
+        <a class="nav-item" data-route="scheme-analytics" data-role="admin,officer" href="#scheme-analytics">
+          <span class="nav-icon"><i class="hgi-stroke hgi-chart-bar-line"></i></span> Scheme Analytics
+        </a>
+        <a class="nav-item" data-route="dept-analytics" data-role="admin,officer" href="#dept-analytics">
+          <span class="nav-icon"><i class="hgi-stroke hgi-office"></i></span> Dept Analytics
+        </a>
+
+        <!-- Management -->
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+        </div>
+        <a class="nav-item" data-route="masters" data-role="admin" href="#masters">
+          <span class="nav-icon"><i class="hgi-stroke hgi-settings-01"></i></span> Masters
+        </a>
+        <a class="nav-item" data-route="reports" data-role="admin,officer" href="#reports">
+          <span class="nav-icon"><i class="hgi-stroke hgi-analytics-02"></i></span> Reports
+        </a>
+        <a class="nav-item" data-route="audit" data-role="admin,officer" href="#audit">
+          <span class="nav-icon"><i class="hgi-stroke hgi-document-attachment"></i></span> Audit Log
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="sidebarUserAvatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">Admin</div>
+            <div class="user-role" id="sidebarUserRole">Super Admin</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn" style="margin-top:var(--space-3);width:100%;justify-content:center;color:rgba(255,255,255,0.5)">
+          <i class="hgi-stroke hgi-logout-01"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ── Main Area ── -->
+    <div class="main-area">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="hamburger-btn" id="hamburgerBtn"><i class="hgi-stroke hgi-menu-01"></i></button>
+          <h2 class="header-title" id="headerTitle">Dashboard</h2>
+        </div>
+        <div class="header-right">
+          <!-- Search -->
+          <div class="header-search">
+            <span class="search-icon"><i class="hgi-stroke hgi-search-01"></i></span>
+            <input type="text" placeholder="Search works..." id="globalSearch" onkeydown="if(event.key==='Enter'){Router.navigate('works');setTimeout(()=>{const s=document.getElementById('filterSearch');if(s){s.value=this.value;s.dispatchEvent(new Event('input'))}},100)}">
+          </div>
+
+          <!-- Notifications -->
+          <div style="position:relative">
+            <button class="header-action" id="notifBtn" data-tooltip="Notifications">
+              <i class="hgi-stroke hgi-notification-01"></i>
+              <span class="notif-dot"></span>
+            </button>
+
+            <div class="notif-dropdown" id="notifDropdown">
+              <div class="notif-dropdown-header">
+                <h4><i class="hgi-stroke hgi-notification-01"></i> Notifications</h4>
+                <button class="btn btn-sm btn-ghost">Mark all read</button>
+              </div>
+              <div class="notif-list" id="notifList">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- User -->
+          <button class="header-action" data-tooltip="Profile" onclick="alert('Profile settings - Demo')"><i class="hgi-stroke hgi-user"></i></button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content" id="mainContent">
+        <!-- Content rendered by router -->
+      </main>
+    </div>
+  </div>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/works.js"></script>
+  <script src="js/masters.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,299 @@
+/* ===== Layout (App Shell) ===== */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-body);
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-sidebar);
+  color: var(--text-inverse);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-base);
+  z-index: 100;
+  border-right: 1px solid var(--border-medium);
+}
+
+.sidebar-brand {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.brand-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.brand-title {
+  display: block;
+  font-weight: var(--font-bold);
+  font-size: var(--text-sm);
+  letter-spacing: 0.5px;
+}
+
+.brand-subtitle {
+  display: block;
+  font-size: var(--text-xs);
+  opacity: 0.7;
+  font-family: var(--font-hindi);
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) 0;
+}
+
+.nav-section {
+  padding: var(--space-2) var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.nav-section-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--primary-200);
+  font-weight: var(--font-semibold);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-4);
+  color: var(--neutral-300);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  border-left-color: var(--accent-500);
+  font-weight: var(--font-medium);
+}
+
+.nav-icon {
+  margin-right: 12px;
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.sidebar-footer {
+  padding: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: transparent;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary-600);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  font-size: var(--text-sm);
+  margin-right: 12px;
+}
+
+.user-name {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: white;
+}
+
+.user-role {
+  font-size: var(--text-xs);
+  color: var(--neutral-400);
+}
+
+/* ── Main Area ── */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.header {
+  height: var(--header-height);
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  z-index: 10;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.hamburger-btn {
+  display: none;
+  font-size: 20px;
+  color: var(--text-secondary);
+  padding: 4px;
+}
+
+.header-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-body);
+  border-radius: var(--radius-md);
+  padding: 4px 12px;
+  width: 250px;
+  border: 1px solid var(--border-light);
+}
+
+.header-search input {
+  border: none;
+  background: transparent;
+  padding: 4px 8px;
+  width: 100%;
+}
+.header-search input:focus {
+  box-shadow: none;
+}
+
+.header-action {
+  color: var(--text-secondary);
+  font-size: 18px;
+  position: relative;
+  padding: 4px;
+}
+.header-action:hover {
+  color: var(--primary-600);
+}
+
+.notif-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--danger);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-header);
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+}
+
+/* Notification Dropdown */
+.notif-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 320px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: none;
+  z-index: 50;
+}
+
+.notif-dropdown.show { display: block; }
+
+.notif-dropdown-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-body);
+}
+
+.notif-dropdown-header h4 { margin: 0; font-size: var(--text-sm); }
+
+.notif-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  gap: var(--space-3);
+}
+
+.notif-item:hover { background-color: var(--bg-hover); }
+.notif-item:last-child { border-bottom: none; }
+
+.notif-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.notif-icon.warning { background: var(--warning-light); color: var(--warning); }
+.notif-icon.error { background: var(--danger-light); color: var(--danger); }
+.notif-icon.success { background: var(--success-light); color: var(--success); }
+.notif-icon.info { background: var(--info-light); color: var(--info); }
+
+.notif-text {
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.notif-time {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 90;
+  display: none;
+}
+.sidebar-overlay.show { display: block; }
