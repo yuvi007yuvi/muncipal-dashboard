@@ -38,8 +38,8 @@ graph TD
 
     subgraph Backend [Node.js + Express]
         API[RESTful API endpoints]
-        AuthRoute[/api/login]
-        DataRoute[/api/works]
+        AuthRoute["/api/login"]
+        DataRoute["/api/works"]
     end
 
     subgraph Database [Storage]
