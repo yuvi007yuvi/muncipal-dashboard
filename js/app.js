@@ -96,8 +96,10 @@
     // Initialize router (registers hashchange listener)
     Router.init();
 
-    // Show login first (before hook will block until logged in)
-    Auth.renderLogin();
+    // Show login first, unless a session exists
+    if (!Auth.checkSession()) {
+      Auth.renderLogin();
+    }
   });
 
 })();
