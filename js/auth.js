@@ -32,16 +32,7 @@ window.Auth = (function () {
               <p style="color: var(--neutral-500); font-size: 0.875rem; margin-bottom: 0;">Enter your assigned credentials to continue.</p>
             </div>
             <form id="loginForm">
-              <div class="form-group">
-                <label for="loginRole" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--neutral-600); font-weight: 600;">Role / भूमिका</label>
-                <select id="loginRole" required>
-                  <option value="">— Select Role —</option>
-                  <option value="admin">Super Admin</option>
-                  <option value="officer">Municipal Officer</option>
-                  <option value="je">Junior Engineer (JE)</option>
-                  <option value="councillor">Councillor / पार्षद</option>
-                </select>
-              </div>
+              <!-- Removed role select -->
 
               <div class="form-group">
                 <label for="loginUser" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--neutral-600); font-weight: 600;">Username / उपयोगकर्ता</label>
@@ -66,11 +57,38 @@ window.Auth = (function () {
       </div>
     `;
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
-      const role = document.getElementById('loginRole').value;
-      if (!role) { alert('Please select a role'); return; }
-      login(role);
+      const username = document.getElementById('loginUser').value.trim();
+      const password = document.getElementById('loginPass').value.trim();
+      if (!username || !password) { alert('Please enter username and password'); return; }
+      
+      const btn = document.getElementById('loginBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Signing in...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        if (response.ok) {
+          const user = await response.json();
+          localStorage.setItem('nnmv_user', JSON.stringify(user));
+          login(user);
+        } else {
+          alert('Invalid username or password');
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      } catch (err) {
+        alert('Could not connect to the server. Please ensure the backend is running.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
     });
 
     // Initialize particles slightly delayed to ensure DOM is ready and styled
@@ -149,8 +167,8 @@ window.Auth = (function () {
     });
   }
 
-  function login(role) {
-    currentUser = DATA.USERS.find(u => u.role === role) || DATA.USERS[0];
+  function login(user) {
+    currentUser = user;
 
     document.getElementById('loginPage').classList.add('hidden');
     document.getElementById('appShell').classList.remove('hidden');
@@ -164,12 +182,12 @@ window.Auth = (function () {
     if (userAvatarEl) userAvatarEl.textContent = currentUser.name.charAt(0);
 
     // Adjust sidebar based on role
-    updateNavForRole(role);
+    updateNavForRole(currentUser.role);
 
     // Navigate to appropriate dashboard
-    if (role === 'je') {
+    if (currentUser.role === 'je') {
       Router.navigate('je-dashboard');
-    } else if (role === 'councillor') {
+    } else if (currentUser.role === 'councillor') {
       Router.navigate('councillor-dashboard');
     } else {
       Router.navigate('dashboard');
@@ -178,8 +196,22 @@ window.Auth = (function () {
     Router.handleRoute();
   }
 
+  function checkSession() {
+    const savedUser = localStorage.getItem('nnmv_user');
+    if (savedUser) {
+      try {
+        login(JSON.parse(savedUser));
+        return true;
+      } catch(e) {
+        localStorage.removeItem('nnmv_user');
+      }
+    }
+    return false;
+  }
+
   function logout() {
     currentUser = null;
+    localStorage.removeItem('nnmv_user');
     window.location.hash = '';
     renderLogin();
   }
@@ -200,5 +232,5 @@ window.Auth = (function () {
     });
   }
 
-  return { renderLogin, login, logout, getUser };
+  return { renderLogin, login, logout, getUser, checkSession };
 })();

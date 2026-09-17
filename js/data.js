@@ -424,13 +424,8 @@ const NOTIFICATIONS = [
   { id: 12, type: 'success', icon: '✅', message: 'NNMV-2026-00014 verification approved', time: '3 days ago', read: true }
 ];
 
-// ── Users (mock) ──
-const USERS = [
-  { id: 'admin', name: 'Admin User', role: 'admin', roleName: 'Super Admin', ward: null },
-  { id: 'officer1', name: 'Nagar Ayukt', role: 'officer', roleName: 'Municipal Officer', ward: null },
-  { id: 'je001', name: 'Rajesh Kumar', role: 'je', roleName: 'Junior Engineer', ward: null, jeId: 'JE001' },
-  { id: 'coun15', name: 'Councillor W15', role: 'councillor', roleName: 'Councillor', ward: 15 }
-];
+// ── Users (migrated to SQLite) ──
+// Users are now fetched dynamically on login
 
 // ── Computed Stats ──
 function computeStats(worksList) {
@@ -480,7 +475,7 @@ function computeJEStats() {
 window.DATA = {
   WARDS, ZONES, SCHEMES, DEPARTMENTS, WORK_TYPES, JES, CONTRACTORS,
   MILESTONE_TEMPLATES, STATUSES, WORKS, ALL_MILESTONES, ALL_PROGRESS_UPDATES,
-  ALL_PHOTOS, AUDIT_LOG, NOTIFICATIONS, USERS,
+  ALL_PHOTOS, AUDIT_LOG, NOTIFICATIONS,
   computeStats, computeWardStats, computeSchemeStats, computeDeptStats, computeJEStats,
   formatDate, addDays, randomItem, randomInt,
   

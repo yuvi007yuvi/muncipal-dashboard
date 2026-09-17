@@ -76,6 +76,19 @@ db.serialize(() => {
     );
   }
   stmtWorks.finalize();
+
+  console.log('Seeding Users...');
+  const stmtUsers = db.prepare('INSERT OR REPLACE INTO users (id, username, password, name, role, roleName, wardId, jeId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+  const defaultUsers = [
+    { id: 'admin', username: 'admin', password: 'admin123', name: 'Admin User', role: 'admin', roleName: 'Super Admin', ward: null, jeId: null },
+    { id: 'officer1', username: 'officer', password: 'officer123', name: 'Nagar Ayukt', role: 'officer', roleName: 'Municipal Officer', ward: null, jeId: null },
+    { id: 'je001', username: 'je001', password: 'je123', name: 'Rajesh Kumar', role: 'je', roleName: 'Junior Engineer', ward: null, jeId: 'JE001' },
+    { id: 'coun15', username: 'coun15', password: 'coun123', name: 'Councillor W15', role: 'councillor', roleName: 'Councillor', ward: 15, jeId: null }
+  ];
+  for (const u of defaultUsers) {
+    stmtUsers.run(u.id, u.username, u.password, u.name, u.role, u.roleName, u.ward, u.jeId);
+  }
+  stmtUsers.finalize();
   
   console.log('Database seeded successfully!');
 });
