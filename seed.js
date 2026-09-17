@@ -46,6 +46,17 @@ db.serialize(() => {
     lng REAL
   )`);
 
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    username TEXT UNIQUE,
+    password TEXT,
+    name TEXT,
+    role TEXT,
+    roleName TEXT,
+    wardId INTEGER,
+    jeId TEXT
+  )`);
+
   console.log('Seeding Wards...');
   const stmtWards = db.prepare('INSERT OR REPLACE INTO wards (id, nameEn, name, zone, councillor, party, phone) VALUES (?, ?, ?, ?, ?, ?, ?)');
   for (const w of WARDS) {
